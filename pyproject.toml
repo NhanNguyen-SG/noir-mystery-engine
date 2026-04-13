@@ -1,0 +1,16 @@
+[project]
+name = "noir-mystery-engine"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+dependencies = [
+    "pydantic-ai",
+    "pydantic-evals",
+    "chromadb",
+    "sentence-transformers",
+    "python-dotenv",
+    "httpx",
+]
+
+[project.scripts]
+noir = "main:main"
