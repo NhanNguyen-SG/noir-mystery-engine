@@ -7,3 +7,4 @@ chroma_store/
 detective_memory.json
 *.dylib
 
+test_quick.py
