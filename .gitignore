@@ -1,6 +1,7 @@
 venv/
 __pycache__/
 *.pyc
+*.pyo
 .env
 chroma_store/
 detective_memory.json
