@@ -149,6 +149,7 @@ noir-mystery-engine/
 |------|--------------|
 | Nhan | RAG pipeline, Detective agent, Witness agent, Orchestrator, Tools, Narrator agent |
 | Khoi | Evaluation suite, CLI, Notebook, Presentation |
+| Brent | Pending|
 
 ## AI Usage Disclosure
 
