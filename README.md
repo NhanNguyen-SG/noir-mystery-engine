@@ -147,8 +147,8 @@ noir-mystery-engine/
 
 | Name | Contributions |
 |------|--------------|
-| Person A | RAG pipeline, Detective agent, Witness agent, Orchestrator, Tools |
-| Person B | Narrator agent, Evaluation suite, CLI, Notebook, Presentation |
+| Nhan | RAG pipeline, Detective agent, Witness agent, Orchestrator, Tools, Narrator agent |
+| Khoi | Evaluation suite, CLI, Notebook, Presentation |
 
 ## AI Usage Disclosure
 
