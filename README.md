@@ -153,8 +153,6 @@ noir-mystery-engine/
 
 ## AI Usage Disclosure
 
-This project used Claude (Anthropic) and GitHub Copilot to assist with code generation, debugging, and documentation. All AI-generated content was reviewed, tested, and understood by both team members. Prompts and AI interactions are documented in `overview.ipynb`.
-
 ## Course
 
 CAP-6640 — Computational Understanding of Natural Language
