@@ -151,6 +151,16 @@ noir-mystery-engine/
 | Khoi | Evaluation suite, CLI, Notebook, Presentation |
 | Brent | Pending|
 
+## AI usage disclosure
+
+Nhan used: Claude Anthopic
+Prompts: 
+- pending
+
+Khoi used...
+- pending
+
+
 ## Course
 
 CAP-6640 — Computational Understanding of Natural Language
