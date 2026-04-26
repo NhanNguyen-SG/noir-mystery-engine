@@ -47,36 +47,22 @@ git clone https://github.com/NhanNguyen-SG/noir-mystery-engine.git
 cd noir-mystery-engine
 ```
 
-**2. Create and activate virtual environment**
-
-Mac/Linux:
+**2. Install dependencies with uv**
 ```bash
-python3.11 -m venv venv
-source venv/bin/activate
+uv sync
 ```
 
-Windows:
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**3. Install dependencies**
-```bash
-pip install pydantic-ai pydantic-evals chromadb sentence-transformers python-dotenv httpx
-```
-
-**4. Set up environment variables**
+**3. Set up environment variables**
 ```bash
 cp .env.example .env
 ```
-Then open `.env` and fill in your course API key and proxy URL:
+Then open `.env` and add your Anthropic API key:
 ```
-OPENAI_API_KEY=your_course_key_here
-OPENAI_BASE_URL=https://litellm.6640.ucf.spencerlyon.com
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ```
+Get a key at [console.anthropic.com](https://console.anthropic.com).
 
-**5. Download the corpus and build the vector store**
+**4. Download the corpus and build the vector store**
 ```bash
 cd corpus
 curl -o sherlock_adventures.txt "https://www.gutenberg.org/files/1661/1661-0.txt"
@@ -84,31 +70,48 @@ curl -o sherlock_memoirs.txt "https://www.gutenberg.org/files/834/834-0.txt"
 curl -o sherlock_return.txt "https://www.gutenberg.org/files/108/108-0.txt"
 curl -o mysterious_affair.txt "https://www.gutenberg.org/files/863/863-0.txt"
 cd ..
-python src/rag/ingest.py
+uv run python src/rag/ingest.py
 ```
 
-**6. Run the system**
+## Running the app
+
+### Shiny web interface (recommended)
+
 ```bash
-PYTHONPATH=. python main.py
+uv run shiny run app.py
 ```
 
-## Usage
+Then open `http://127.0.0.1:8000` in your browser.
+
+![Noir Mystery Engine — Shiny UI](front_end.png)
+
+Describe a crime scene in the sidebar and click **Begin Investigation**. The agent activity feed shows each step in real time as the Detective, Witness, Analyst, and Narrator agents do their work. The final story appears in the main panel once complete.
+
+### CLI
+
+```bash
+uv run main.py
+```
 
 ```
-$ PYTHONPATH=. python main.py
+$ uv run main.py
 
-Welcome to the Noir Mystery Engine
-Enter a crime scene description: A wealthy banker was found dead in his locked study...
+🎩  NOIR MYSTERY STORY ENGINE  🎩
+Where every crime scene tells a story...
 
-Investigating...
-Retrieving witness testimony...
-Writing your story...
+Describe your crime scene: A wealthy banker was found dead in his locked study...
 
-============================================================
-TITLE: The Banker's Last Secret
-SETTING: A rain-soaked manor, midnight
-SUSPECT: The Butler
-VERDICT: Guilty beyond reasonable doubt
+🔍 Detective investigating the scene...
+📚 Witness retrieving archive context...
+📋 Scoring clues by importance...
+✍️  Narrator writing the story...
+
+════════════════════════════════════════════════════════════
+📖  TITLE:    The Banker's Last Secret
+🏛️   SETTING:  A rain-soaked manor, midnight
+🔍  CLUES:    5 discovered
+🎯  TOP CLUE: Torn letter on the desk
+🕵️   SUSPECT:  The Butler
 ...
 ```
 
@@ -137,7 +140,9 @@ noir-mystery-engine/
 ├── corpus/                     # Public domain detective stories
 ├── overview.ipynb              # End-to-end walkthrough notebook
 ├── presentation/               # Week 14 slides
+├── app.py                      # Shiny web interface
 ├── main.py                     # CLI entry point
+├── front_end.png               # UI screenshot
 ├── pyproject.toml
 ├── .env.example
 └── README.md
