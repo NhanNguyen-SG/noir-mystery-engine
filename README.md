@@ -154,7 +154,7 @@ noir-mystery-engine/
 |------|--------------|
 | Nhan | RAG pipeline, Detective agent, Witness agent, Orchestrator, Tools, Narrator agent |
 | Khoi | Evaluation suite, CLI, Notebook, Presentation |
-| Brent | Pending|
+| Brent | Tested and reviewed the agent framework, developed front for use in browser|
 
 ## AI usage disclosure
 
@@ -165,6 +165,9 @@ Prompts:
 Khoi used...
 - pending
 
+Brent used: Claude Anthropic
+Prompts:
+- pending
 
 ## Course
 
