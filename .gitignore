@@ -8,3 +8,4 @@ detective_memory.json
 *.dylib
 
 test_quick.py
+.DS_Store
