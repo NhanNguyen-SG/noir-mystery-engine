@@ -2,14 +2,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import asyncio
-from pydantic_ai import Agent
 from pydantic import BaseModel
 from src.agents.detective import investigate
 from src.agents.witness import retrieve_context
 from src.agents.narrator import narrate
-from src.agents.narrator import StoryReport
+from src.models.story_report import StoryReport
 from src.tools.clue_scorer import score_clues
-from src.tools.file_reader import read_case_file
 
 class OrchestratorOutput(BaseModel):
     story: StoryReport

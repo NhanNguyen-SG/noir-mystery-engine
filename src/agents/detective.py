@@ -9,7 +9,7 @@ from pathlib import Path
 MEMORY_FILE = Path("detective_memory.json")
 
 detective = Agent(
-    "openai:claude-sonnet-4-6",
+    "anthropic:claude-sonnet-4-6",
     output_type=ClueFinding,
     system_prompt="""You are a hard-boiled noir detective. You reason through crime scenes 
     step by step, identifying clues, suspects, and motives. Be specific and analytical. 

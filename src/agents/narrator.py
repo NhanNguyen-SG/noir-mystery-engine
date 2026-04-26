@@ -2,20 +2,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from pydantic_ai import Agent
-from pydantic import BaseModel
 from src.models.clue_finding import ClueFinding
+from src.models.story_report import StoryReport
 from src.agents.witness import WitnessFindings
 
-class StoryReport(BaseModel):
-    title: str
-    setting: str
-    clue_summary: list[str]
-    prime_suspect: str
-    verdict: str
-    full_story: str
-
 narrator = Agent(
-    "openai:claude-sonnet-4-6",
+    "anthropic:claude-sonnet-4-6",
     output_type=StoryReport,
     system_prompt="""You are a noir fiction writer in the tradition of Raymond Chandler 
     and Dashiell Hammett. You take detective findings and witness testimony and weave 
