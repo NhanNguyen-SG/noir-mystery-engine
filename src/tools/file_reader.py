@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from pathlib import Path
-from pydantic_ai import ModelRetry
 
 def read_case_file(filename: str) -> str:
     """
@@ -21,7 +20,7 @@ def read_case_file(filename: str) -> str:
 
     if not corpus_path.exists():
         available = [f.name for f in Path("corpus").glob("*.txt")]
-        raise ModelRetry(
+        raise FileNotFoundError(
             f"File '{filename}' not found in corpus. "
             f"Available files: {available}"
         )
@@ -30,7 +29,7 @@ def read_case_file(filename: str) -> str:
         content = corpus_path.read_text(encoding="utf-8", errors="ignore")
         return content[:2000]
     except Exception as e:
-        raise ModelRetry(f"Could not read file '{filename}': {str(e)}")
+        raise IOError(f"Could not read file '{filename}': {str(e)}")
 
 
 if __name__ == "__main__":

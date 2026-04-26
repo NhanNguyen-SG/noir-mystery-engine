@@ -10,6 +10,7 @@ dependencies = [
     "sentence-transformers",
     "python-dotenv",
     "httpx",
+    "shiny",
 ]
 
 [project.scripts]

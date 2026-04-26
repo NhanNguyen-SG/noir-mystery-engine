@@ -13,7 +13,7 @@ class WitnessFindings(BaseModel):
 retriever = NightRetriever(n_results=3)
 
 witness = Agent(
-    "openai:claude-sonnet-4-6",
+    "anthropic:claude-sonnet-4-6",
     output_type=WitnessFindings,
     system_prompt="""You are a noir story witness — an archivist who retrieves relevant 
     passages from classic detective stories. Given clues from a crime scene, you find 

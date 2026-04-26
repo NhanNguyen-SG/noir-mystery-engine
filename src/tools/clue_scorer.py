@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from pydantic_ai import ModelRetry
 from pydantic import BaseModel
 
 class ScoredClue(BaseModel):
@@ -23,7 +22,7 @@ def score_clues(clues: list[str]) -> list[ScoredClue]:
         ModelRetry: If the clue list is empty.
     """
     if not clues:
-        raise ModelRetry("No clues provided to score. Please provide at least one clue.")
+        raise ValueError("No clues provided to score. Please provide at least one clue.")
 
     scored = []
     for clue in clues:
