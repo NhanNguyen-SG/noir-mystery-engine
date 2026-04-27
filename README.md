@@ -147,6 +147,9 @@ noir-mystery-engine/
 ├── .env.example
 └── README.md
 ```
+## Evaluation
+
+![Evaluation Summary](evals.png)
 
 ## Team
 
