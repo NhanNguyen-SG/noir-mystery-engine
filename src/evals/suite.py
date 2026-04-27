@@ -8,6 +8,7 @@ from pydantic_evals.evaluators import Evaluator, EvaluatorContext
 from pydantic_ai import Agent
 from src.agents.orchestrator import run_mystery_engine
 from src.agents.orchestrator import OrchestratorOutput
+from src.agents.model_config import build_model
 
 # ── Evaluator 1: Deterministic ──────────────────────────────
 class ContainsExpectedFields(Evaluator[str, OrchestratorOutput]):
@@ -48,7 +49,7 @@ class NoirQualityJudge(Evaluator[str, OrchestratorOutput]):
             return 0.0
 
         judge = Agent(
-            "openai:claude-sonnet-4-6",
+            build_model(),
             output_type=bool,
             system_prompt="""You are a literary critic judging noir fiction quality.
             Return true if the story has atmospheric noir writing, a clear suspect,

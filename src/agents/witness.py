@@ -4,6 +4,7 @@ load_dotenv()
 from pydantic_ai import Agent
 from pydantic import BaseModel
 from src.rag.retriever import NightRetriever
+from src.agents.model_config import build_model
 
 class WitnessFindings(BaseModel):
     passages: list[str]
@@ -13,7 +14,7 @@ class WitnessFindings(BaseModel):
 retriever = NightRetriever(n_results=3)
 
 witness = Agent(
-    "anthropic:claude-sonnet-4-6",
+    build_model(),
     output_type=WitnessFindings,
     system_prompt="""You are a noir story witness — an archivist who retrieves relevant 
     passages from classic detective stories. Given clues from a crime scene, you find 

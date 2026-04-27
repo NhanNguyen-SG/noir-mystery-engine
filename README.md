@@ -56,11 +56,11 @@ uv sync
 ```bash
 cp .env.example .env
 ```
-Then open `.env` and add your Anthropic API key:
+Then open `.env` and add your course gateway key:
 ```
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+OPENAI_API_KEY=your_course_gateway_key_here
+OPENAI_BASE_URL=https://litellm.6640.ucf.spencerlyon.com
 ```
-Get a key at [console.anthropic.com](https://console.anthropic.com).
 
 **4. Download the corpus and build the vector store**
 ```bash

@@ -5,9 +5,10 @@ from pydantic_ai import Agent
 from src.models.clue_finding import ClueFinding
 from src.models.story_report import StoryReport
 from src.agents.witness import WitnessFindings
+from src.agents.model_config import build_model
 
 narrator = Agent(
-    "anthropic:claude-sonnet-4-6",
+    build_model(),
     output_type=StoryReport,
     system_prompt="""You are a noir fiction writer in the tradition of Raymond Chandler 
     and Dashiell Hammett. You take detective findings and witness testimony and weave 

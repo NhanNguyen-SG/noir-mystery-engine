@@ -3,13 +3,14 @@ load_dotenv()
 from pydantic_ai import Agent
 from pydantic_ai.messages import ModelMessagesTypeAdapter
 from src.models.clue_finding import ClueFinding
+from src.agents.model_config import build_model
 import json
 from pathlib import Path
 
 MEMORY_FILE = Path("detective_memory.json")
 
 detective = Agent(
-    "anthropic:claude-sonnet-4-6",
+    build_model(),
     output_type=ClueFinding,
     system_prompt="""You are a hard-boiled noir detective. You reason through crime scenes 
     step by step, identifying clues, suspects, and motives. Be specific and analytical. 
