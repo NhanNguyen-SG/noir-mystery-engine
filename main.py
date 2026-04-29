@@ -17,21 +17,38 @@ def print_banner():
 def print_divider():
     print("\n" + "═" * 60 + "\n")
 
+def read_scene_from_file(file_path: str) -> str:
+    path = Path(file_path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    if not path.is_file():
+        raise ValueError(f"Path is not a file: {file_path}")
+
+    if path.suffix.lower() != ".txt":
+        raise ValueError("Please provide a .txt file")
+
+    return path.read_text(encoding="utf-8").strip()
+
+
 
 async def main():
+    parser = argparse.ArgumentParser(description="Noir Mystery Story Engine")
+    parser.add_argument(
+        "--file",
+        "-f",
+        help="Path to a .txt file containing the crime scene",
+    )
+
+    args = parser.parse_args()
+
     print_banner()
 
-    print("Describe your crime scene in as much detail as you like.")
-    print("Press Enter twice when done.\n")
-
-    lines = []
-    while True:
-        line = input()
-        if line == "" and lines and lines[-1] == "":
-            break
-        lines.append(line)
-
-    scene = "\n".join(lines).strip()
+    if args.file:
+        scene = read_scene_from_file(args.file)
+    else:
+        scene = read_scene_from_terminal()
 
     if not scene:
         print("No scene provided. Exiting.")

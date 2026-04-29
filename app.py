@@ -1,12 +1,38 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from shiny import App, ui, render, reactive
+from pathlib import Path
+
+from shiny import App, ui, render, reactive, run_app
+
 from src.agents.detective import investigate
 from src.agents.witness import retrieve_context
 from src.agents.narrator import narrate
 from src.tools.clue_scorer import score_clues
 from src.agents.orchestrator import OrchestratorOutput
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def read_uploaded_txt(file_info) -> str:
+    """
+    Read an uploaded .txt file from Shiny's input_file() object.
+    """
+    if not file_info:
+        return ""
+
+    uploaded = file_info[0]
+
+    original_name = uploaded["name"]
+    temp_path = uploaded["datapath"]
+
+    if not original_name.lower().endswith(".txt"):
+        raise ValueError("Please upload a .txt file.")
+
+    return Path(temp_path).read_text(encoding="utf-8").strip()
+
 
 # ---------------------------------------------------------------------------
 # UI
@@ -63,6 +89,7 @@ app_ui = ui.page_fluid(
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 8px;
+            margin-top: 12px;
         }
 
         textarea.form-control {
@@ -84,6 +111,18 @@ app_ui = ui.page_fluid(
         textarea.form-control::placeholder {
             color: #4a3e28 !important;
             font-style: italic;
+        }
+
+        input[type="file"] {
+            color: #9a8a70 !important;
+            font-family: 'Georgia', serif;
+            font-size: 0.85rem;
+        }
+
+        .form-control {
+            background: #0a0a0a !important;
+            color: #e8e0d0 !important;
+            border: 1px solid #3a2e1a !important;
         }
 
         .btn-noir {
@@ -268,7 +307,15 @@ app_ui = ui.page_fluid(
 
     ui.layout_sidebar(
         ui.sidebar(
-            ui.tags.span("Describe the crime scene:", class_="scene-label"),
+            ui.tags.span("Upload a crime scene file:", class_="scene-label"),
+            ui.input_file(
+                "scene_file",
+                "Upload a .txt file",
+                accept=[".txt"],
+                multiple=False,
+            ),
+
+            ui.tags.span("Or describe the crime scene:", class_="scene-label"),
             ui.input_text_area(
                 "scene",
                 label=None,
@@ -281,6 +328,7 @@ app_ui = ui.page_fluid(
                 height="260px",
                 width="100%",
             ),
+
             ui.input_action_button("run_btn", "🔍  Begin Investigation", class_="btn-noir"),
             ui.output_ui("error_ui"),
             ui.output_ui("steps_ui"),
@@ -297,37 +345,62 @@ app_ui = ui.page_fluid(
 # ---------------------------------------------------------------------------
 
 def server(input, output, session):
-    steps      = reactive.value([])
+    steps = reactive.value([])
     result_val = reactive.value(None)
-    loading    = reactive.value(False)
-    error_val  = reactive.value(None)
+    loading = reactive.value(False)
+    error_val = reactive.value(None)
 
     # ── helpers ──────────────────────────────────────────────────────────
     def add_step(icon, name, msg):
         s = list(steps.get())
-        s.append({"icon": icon, "name": name, "msg": msg, "status": "running"})
+        s.append({
+            "icon": icon,
+            "name": name,
+            "msg": msg,
+            "status": "running",
+        })
         steps.set(s)
 
     def finish_step(index, msg, ok=True):
         s = list(steps.get())
         if index < len(s):
-            s[index] = {**s[index], "status": "complete" if ok else "error", "msg": msg}
+            s[index] = {
+                **s[index],
+                "status": "complete" if ok else "error",
+                "msg": msg,
+            }
             steps.set(s)
+
+    def mark_running_step_as_error():
+        s = list(steps.get())
+        for i in reversed(range(len(s))):
+            if s[i]["status"] == "running":
+                s[i]["status"] = "error"
+                break
+        steps.set(s)
 
     # ── main async handler ────────────────────────────────────────────────
     @reactive.effect
     @reactive.event(input.run_btn)
     async def do_investigation():
-        scene = input.scene().strip()
-        if not scene:
-            return
-
         loading.set(True)
         steps.set([])
         result_val.set(None)
         error_val.set(None)
 
         try:
+            uploaded_file = input.scene_file()
+
+            if uploaded_file:
+                scene = read_uploaded_txt(uploaded_file)
+            else:
+                scene = input.scene().strip()
+
+            if not scene:
+                error_val.set("No scene provided. Type a scene or upload a .txt file.")
+                loading.set(False)
+                return
+
             # ── Step 0: Detective ────────────────────────────────────────
             add_step("🔍", "Detective", "Examining the crime scene for physical evidence…")
             clues = await investigate(scene)
@@ -350,21 +423,19 @@ def server(input, output, session):
             story = await narrate(scene, clues, witness_findings)
             finish_step(3, f'Wrote "{story.title}"')
 
-            result_val.set(OrchestratorOutput(
-                story=story,
-                clues_found=len(clues.clues),
-                top_clue=top.description if top else "none",
-                prime_suspect=clues.prime_suspect,
-            ))
+            result_val.set(
+                OrchestratorOutput(
+                    story=story,
+                    clues_found=len(clues.clues),
+                    top_clue=top.description if top else "none",
+                    prime_suspect=clues.prime_suspect,
+                )
+            )
 
         except Exception as e:
             error_val.set(str(e))
-            s = list(steps.get())
-            for i in reversed(range(len(s))):
-                if s[i]["status"] == "running":
-                    s[i]["status"] = "error"
-                    break
-            steps.set(s)
+            mark_running_step_as_error()
+
         finally:
             loading.set(False)
 
@@ -391,7 +462,7 @@ def server(input, output, session):
                     ui.div(step["icon"], class_="step-icon"),
                     ui.div(
                         ui.div(step["name"], class_="step-name"),
-                        ui.div(step["msg"],  class_="step-msg"),
+                        ui.div(step["msg"], class_="step-msg"),
                         class_="step-body",
                     ),
                     class_=f"step step-{step['status']}",
@@ -412,7 +483,7 @@ def server(input, output, session):
         if r is None:
             if not loading() and not steps.get():
                 return ui.div(
-                    "Enter a crime scene and begin the investigation.",
+                    "Enter a crime scene, upload a .txt file, and begin the investigation.",
                     class_="placeholder-msg",
                 )
             return ui.div()
@@ -423,7 +494,7 @@ def server(input, output, session):
 
                 ui.div(
                     ui.div(
-                        ui.div("Setting",       class_="meta-cell-label"),
+                        ui.div("Setting", class_="meta-cell-label"),
                         ui.div(r.story.setting, class_="meta-cell-value"),
                         class_="meta-cell",
                     ),
@@ -433,13 +504,13 @@ def server(input, output, session):
                         class_="meta-cell",
                     ),
                     ui.div(
-                        ui.div("Top Clue",  class_="meta-cell-label"),
-                        ui.div(r.top_clue,  class_="meta-cell-value"),
+                        ui.div("Top Clue", class_="meta-cell-label"),
+                        ui.div(r.top_clue, class_="meta-cell-value"),
                         class_="meta-cell",
                     ),
                     ui.div(
-                        ui.div("Clues Found",       class_="meta-cell-label"),
-                        ui.div(str(r.clues_found),  class_="meta-cell-value"),
+                        ui.div("Clues Found", class_="meta-cell-label"),
+                        ui.div(str(r.clues_found), class_="meta-cell-value"),
                         class_="meta-cell",
                     ),
                     class_="meta-grid",
@@ -450,8 +521,8 @@ def server(input, output, session):
                 ui.tags.p(r.story.full_story, class_="story-body"),
 
                 ui.div(
-                    ui.div("Verdict",         class_="verdict-label"),
-                    ui.div(r.story.verdict,   class_="verdict-text"),
+                    ui.div("Verdict", class_="verdict-label"),
+                    ui.div(r.story.verdict, class_="verdict-text"),
                     class_="verdict-box",
                 ),
                 class_="story-card",
@@ -460,5 +531,7 @@ def server(input, output, session):
 
 
 app = App(app_ui, server)
+
+
 if __name__ == "__main__":
     run_app(app, launch_browser=True)
