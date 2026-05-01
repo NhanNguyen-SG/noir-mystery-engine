@@ -32,6 +32,8 @@ async def run_mystery_engine(scene: str) -> OrchestratorOutput:
     clue_text = " ".join(c.description for c in clues.clues)
     witness_findings = await retrieve_context(clue_text)
 
+    print(f"📖 Witness used: {witness_findings.source_type.upper()}")
+
     print("📋 Scoring clues by importance...")
     scored = score_clues([c.description for c in clues.clues])
 
