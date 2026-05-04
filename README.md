@@ -165,8 +165,9 @@ Nhan used: Claude Anthopic
 Prompts: 
 - pending
 
-Khoi used...
-- pending
+Khoi used ChatGPT OpenAO 
+- Prompts:
+- test case ,  web search 
 
 Brent used: Claude Anthropic
 Prompts:
