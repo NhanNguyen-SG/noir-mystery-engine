@@ -187,7 +187,7 @@ Khoi used : Chat GPT openAI
 -  How to know if the AI agent are following the step ?
 -  How can you check if my prompt for  all of my AI agent is following my logics
 -  Print out all of the step that the detective AI has go through
--  
+-  Apply web search for my witness AI too and make sure that it look at corpus first before doing web searchhh
 
 Brent used: Claude Anthropic
 - What is the architecture of the project
