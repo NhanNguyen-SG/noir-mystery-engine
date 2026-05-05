@@ -190,8 +190,13 @@ Khoi used : Chat GPT openAI
 -  
 
 Brent used: Claude Anthropic
-Prompts:
-- pending
+- What is the architecture of the project
+- What are the most obvious way this could be improved
+- Are there other similar tools like this
+- Create a Shiny python application that uses the main program as a backend
+- Update the app to have a consistant and user friendly interface
+- Add a image generation step after the initial story is formed
+- Remove the image generation feature
 
 ## Course
 
