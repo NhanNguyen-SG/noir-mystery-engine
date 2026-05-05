@@ -161,9 +161,22 @@ noir-mystery-engine/
 
 ## AI usage disclosure
 
-Nhan used: Claude Anthopic
-Prompts: 
-- pending
+**Nhan used: Claude Anthopic**
+- Is my idea too simple for this project?
+- What can I do to make it more interested?
+- Does my system design make sense to you? any overlapping?
+- Is detective doing too many things?
+- any idea for 3 tools?
+- The websearch is working but it didn't wire to anything, what should I do?
+- how do I know if RAG is working?
+- is these chunks too small?
+- why Witness ignore the retrieved context?
+- how can i show memory change behavior?
+- idk if this is actually multi agent or just steps in order...?
+- is my evaluation too easy?
+- debug please
+- help me enhance my README
+- can you please give me an out line for my overview notebook?
 
 Khoi used...
 - pending
