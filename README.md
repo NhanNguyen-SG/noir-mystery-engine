@@ -178,8 +178,16 @@ noir-mystery-engine/
 - help me enhance my README
 - can you please give me an out line for my overview notebook?
 
-Khoi used...
-- pending
+Khoi used : Chat GPT openAI 
+- how do i used websearch for this project and how will it affect the code base
+- Are my test case interesting enough for and are there any  case that is too strict or not good enough
+- I want my AI agent to search throuhghh corpus first before going to web search
+-  Give me a modern test case something that is hard and not  invovle with sherlock holmes
+-  Can you tell me how to give a cite of what  page that the detective for information
+-  How to know if the AI agent are following the step ?
+-  How can you check if my prompt for  all of my AI agent is following my logics
+-  Print out all of the step that the detective AI has go through
+-  
 
 Brent used: Claude Anthropic
 Prompts:
